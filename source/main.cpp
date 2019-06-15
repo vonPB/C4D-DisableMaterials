@@ -9,8 +9,17 @@ const unsigned MINOR_VER{ 0 };
 
 ::Bool PluginStart()
 {
-	DisableMaterials::register_class();
-	EnableMaterials::register_class();
+	if (!DisableMaterials::register_class())
+	{
+		ApplicationOutput("Failed to register DisableMaterials command");
+		return false;
+	}
+	if(!EnableMaterials::register_class())
+	{
+		ApplicationOutput("Failed to register EnableMaterials command");
+		return false;
+	}
+
 	std::ostringstream str;
 	str << "DisableMaterials v" << MAJOR_VER << '.' << MINOR_VER << " by " << AUTHOR;
 	ApplicationOutput(str.str().c_str());
