@@ -6,7 +6,7 @@
 
 struct DisableMaterials : CommandData
 {
-	static const Int32 ID{100001};
+	static const Int32 ID{1052974};
 
 	Bool Execute(BaseDocument* doc) override;
 
@@ -15,7 +15,7 @@ struct DisableMaterials : CommandData
 
 struct EnableMaterials : CommandData
 {
-	static const Int32 ID{100002};
+	static const Int32 ID{1052975};
 
 	Bool Execute(BaseDocument* doc) override;
 

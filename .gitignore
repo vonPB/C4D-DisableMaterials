@@ -1,0 +1,9 @@
+*.pdb
+*.xdl64
+*.props
+*.user
+*.filters
+*.xcodeproj
+*.vcxproj
+
+generated/
