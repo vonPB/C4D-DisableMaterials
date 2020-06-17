@@ -1,4 +1,4 @@
 # DisableMaterials
 
-Original Gitlab Project: 
+Original Gitlab project: 
 https://gitlab.com/vonPB/disablematerials
