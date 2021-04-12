@@ -1,82 +1,147 @@
 #include "disable_materials.hpp"
 #include "c4d_basedocument.h"
-#include "c4d_basetag.h"
 #include "lib_description.h"
 #include "ttexture.h"
 #include "c4d_general.h"
 #include "c4d_basebitmap.h"
 
 
-Bool DisableMaterials::Execute(BaseDocument* doc)
+Bool DisableMaterials::Execute(BaseDocument* doc, GeDialog* parentManager)
 {
-	AutoAlloc<AtomArray> selecetd_objects;
-	AutoAlloc<AtomArray> tags;
-	// Get selected objects
-	doc->GetActiveObjects(selecetd_objects, GETACTIVEOBJECTFLAGS(1));
-	
-	for (Int32 i{}; i < selecetd_objects->GetCount(); ++i)
+	AutoAlloc<AtomArray> selected_obj;
+	AutoAlloc<AtomArray> selected_tags;
+
+	doc->GetActiveObjects(selected_obj, GETACTIVEOBJECTFLAGS(1));
+	doc->GetActiveTags(selected_tags);
+
+	if (selected_obj->GetCount() > 0 && selected_tags->GetCount() > 0)
 	{
-		BaseObject* current_obj{ static_cast<BaseObject*>(selecetd_objects->GetIndex(i)) };
-		for (BaseTag* current_tag{ current_obj->GetFirstTag() }; current_tag != nullptr; current_tag = current_tag->GetNext())
+		for (Int32 i{}; i < selected_obj->GetCount(); ++i)
 		{
-			if (current_tag->GetType() != Ttexture)
-				continue;
+			BaseObject* current_obj{ static_cast<BaseObject*>(selected_obj->GetIndex(i)) };
+			for (BaseTag* current_tag{ current_obj->GetFirstTag() }; current_tag != nullptr; current_tag = current_tag->GetNext())
+			{
+				for (Int32 j{}; j < selected_tags->GetCount(); ++j)
+				{
+					if (current_tag == selected_tags->GetIndex(j))
+						goto skip_tag;
+				}
+				disable(current_tag);
+			skip_tag:;
+			}
+		}
+	}
 
-			GeData data;
-			current_tag->GetParameter(TEXTURETAG_RESTRICTION, data, DESCFLAGS_GET::NONE);
-			if (data.GetString().FindFirst("*disabled*", nullptr))
-				continue;
-
-			data.SetString("*disabled*" + data.GetString());
-			current_tag->SetParameter(TEXTURETAG_RESTRICTION, data, DESCFLAGS_SET::NONE);
+	else if (selected_obj->GetCount() != 0)
+	{
+		for (Int32 i{}; i < selected_obj->GetCount(); ++i)
+		{
+			BaseObject* current_obj{ static_cast<BaseObject*>(selected_obj->GetIndex(i)) };
+			for (BaseTag* current_tag{ current_obj->GetFirstTag() }; current_tag != nullptr; current_tag = current_tag->GetNext())
+			{
+				disable(current_tag);
+			}
+		}
+	}
+	else if(selected_tags->GetCount() != 0){
+		for (Int32 i{}; i < selected_tags->GetCount(); ++i)
+		{
+			auto current_tag{ static_cast<BaseTag*>(selected_tags->GetIndex(i)) };
+			disable(current_tag);
 		}
 	}
 	EventAdd();
 	return true;
 }
-
 Bool DisableMaterials::register_class()
 {
 	return RegisterCommandPlugin(ID, "Disable Materials"_s, 0, AutoBitmap("DisableMaterials.tif"_s), "Disable selected materials"_s, new DisableMaterials);
 }
 
-
-Bool EnableMaterials::Execute(BaseDocument* doc)
+void DisableMaterials::disable(BaseTag* tag)
 {
-	AutoAlloc<AtomArray> selecetd_objects;
-	AutoAlloc<AtomArray> tags;
-	// Get selected objects
-	doc->GetActiveObjects(selecetd_objects, GETACTIVEOBJECTFLAGS(1));
+	if (tag->GetType() != Ttexture)
+		return;
 
-	for (Int32 i{}; i < selecetd_objects->GetCount(); ++i)
+	GeData data;
+	tag->GetParameter(TEXTURETAG_RESTRICTION, data, DESCFLAGS_GET::NONE);
+	if (data.GetString().FindFirst("*disabled*", nullptr))
+		return;
+
+	data.SetString("*disabled*" + data.GetString());
+	tag->SetParameter(TEXTURETAG_RESTRICTION, data, DESCFLAGS_SET::NONE);
+}
+
+
+Bool EnableMaterials::Execute(BaseDocument* doc, GeDialog* parentManager)
+{
+	AutoAlloc<AtomArray> selected_obj;
+	AutoAlloc<AtomArray> selected_tags;
+	
+	doc->GetActiveObjects(selected_obj, GETACTIVEOBJECTFLAGS(1));
+	doc->GetActiveTags(selected_tags);
+
+	if (selected_obj->GetCount() > 0 && selected_tags->GetCount() > 0)
 	{
-		BaseObject* current_obj{ static_cast<BaseObject*>(selecetd_objects->GetIndex(i)) };
-		for (BaseTag* current_tag{ current_obj->GetFirstTag() }; current_tag != nullptr; current_tag = current_tag->GetNext())
+		for (Int32 i{}; i < selected_obj->GetCount(); ++i)
 		{
-			if (current_tag->GetType() != Ttexture)
-				continue;
-
-			GeData data;
-			current_tag->GetParameter(TEXTURETAG_RESTRICTION, data, DESCFLAGS_GET::NONE);
-
-			Int32 pos{};
-			if (!data.GetString().FindFirst("*disabled*", &pos))
-				continue;
-
-			if (pos != 0)
-				continue;
-
-			auto str{ data.GetString() };
-			str.Delete(pos, 10);
-			data.SetString(str);
-			current_tag->SetParameter(TEXTURETAG_RESTRICTION, data, DESCFLAGS_SET::NONE);
+			BaseObject* current_obj{ static_cast<BaseObject*>(selected_obj->GetIndex(i)) };
+			for (BaseTag* current_tag{ current_obj->GetFirstTag() }; current_tag != nullptr; current_tag = current_tag->GetNext())
+			{
+				for (Int32 j{}; j < selected_tags->GetCount(); ++j)
+				{
+					if (current_tag == selected_tags->GetIndex(j))
+						goto skip_tag;
+				}
+				enable(current_tag);
+			skip_tag:;
+			}
+		}
+	}
+	else if (selected_obj->GetCount() != 0)
+	{
+		for (Int32 i{}; i < selected_obj->GetCount(); ++i)
+		{
+			auto current_obj{ static_cast<BaseObject*>(selected_obj->GetIndex(i)) };
+			for (BaseTag* current_tag{ current_obj->GetFirstTag() }; current_tag != nullptr; current_tag = current_tag->GetNext())
+			{
+				enable(current_tag);
+			}
+		}
+	}
+	else if(selected_tags->GetCount() != 0)
+	{
+		for (Int32 i{}; i < selected_tags->GetCount(); ++i)
+		{
+			auto current_tag{ static_cast<BaseTag*>(selected_tags->GetIndex(i)) };
+			enable(current_tag);
 		}
 	}
 	EventAdd();
 	return true;
 }
-
 Bool EnableMaterials::register_class()
 {
 	return RegisterCommandPlugin(ID, "Enable Materials"_s, 0, AutoBitmap("EnableMaterials.tif"_s), "Enable selected materials"_s, new EnableMaterials);
+}
+
+void EnableMaterials::enable(BaseTag* tag)
+{
+	if (tag->GetType() != Ttexture)
+		return;
+
+	GeData data;
+	tag->GetParameter(TEXTURETAG_RESTRICTION, data, DESCFLAGS_GET::NONE);
+
+	Int32 pos{};
+	if (!data.GetString().FindFirst("*disabled*", &pos))
+		return;
+
+	if (pos != 0)
+		return;
+
+	auto str{ data.GetString() };
+	str.Delete(pos, 10);
+	data.SetString(str);
+	tag->SetParameter(TEXTURETAG_RESTRICTION, data, DESCFLAGS_SET::NONE);
 }

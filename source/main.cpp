@@ -5,7 +5,7 @@
 
 const char* AUTHOR{ "Philipp Bokatius & Henrik S." };
 const unsigned MAJOR_VER{ 1 };
-const unsigned MINOR_VER{ 0 };
+const unsigned MINOR_VER{ 3 };
 
 ::Bool PluginStart()
 {
@@ -23,10 +23,10 @@ const unsigned MINOR_VER{ 0 };
 	std::ostringstream str;
 	str << "DisableMaterials v" << MAJOR_VER << '.' << MINOR_VER << " by " << AUTHOR;
 	ApplicationOutput(str.str().c_str());
-
+	
 	return true;
 }
-
+#include <iostream>
 void PluginEnd()
 {
 	// free resources
@@ -34,7 +34,5 @@ void PluginEnd()
 
 ::Bool PluginMessage(::Int32 id, void* data)
 {
-	
-
 	return true;
 }
