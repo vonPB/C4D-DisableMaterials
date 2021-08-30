@@ -21,8 +21,5 @@ stylecheck.level=0 // must be set after c4d=true
 stylecheck.enum-registration=false
 stylecheck.enum-class=false
 
-
 // Custom ID
 ModuleId=de.vonpb.disablematerials
-
-INCLUDE=source/main.cpp; source/disable_materials.cpp; source/disable_materials.hpp

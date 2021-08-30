@@ -5,7 +5,7 @@
 
 const char* AUTHOR{ "Philipp Bokatius & Henrik S." };
 const unsigned MAJOR_VER{ 1 };
-const unsigned MINOR_VER{ 3 };
+const unsigned MINOR_VER{ 4 };
 
 ::Bool PluginStart()
 {
