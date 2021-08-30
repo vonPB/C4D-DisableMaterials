@@ -55,7 +55,7 @@ Bool DisableMaterials::Execute(BaseDocument* doc, GeDialog* parentManager)
 }
 Bool DisableMaterials::register_class()
 {
-	return RegisterCommandPlugin(ID, "Disable Materials"_s, 0, AutoBitmap("DisableMaterials.tif"_s), "Disable selected materials"_s, new DisableMaterials);
+	return RegisterCommandPlugin(ID, "Disable Materials"_s, 0, AutoBitmap("DisableMaterials.tif"_s), "Disable selected materials"_s, NewObjClear(DisableMaterials));
 }
 
 void DisableMaterials::disable(BaseTag* tag)
@@ -122,7 +122,7 @@ Bool EnableMaterials::Execute(BaseDocument* doc, GeDialog* parentManager)
 }
 Bool EnableMaterials::register_class()
 {
-	return RegisterCommandPlugin(ID, "Enable Materials"_s, 0, AutoBitmap("EnableMaterials.tif"_s), "Enable selected materials"_s, new EnableMaterials);
+	return RegisterCommandPlugin(ID, "Enable Materials"_s, 0, AutoBitmap("EnableMaterials.tif"_s), "Enable selected materials"_s, NewObjClear(EnableMaterials));
 }
 
 void EnableMaterials::enable(BaseTag* tag)
