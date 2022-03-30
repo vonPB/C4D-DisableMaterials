@@ -1,5 +1,5 @@
 # Disable Materials
-![disable_materials_demo](https://user-images.githubusercontent.com/65032978/160909768-02bec3d6-c819-457c-9351-f1881b505bf4.gif)
+![disable_materials_demo](https://user-images.githubusercontent.com/65032978/160909768-02bec3d6-c819-457c-9351-f1881b505bf4.gif)[^1]
 
 Simple C4D plugin to disable and enable materials.
 
@@ -22,3 +22,5 @@ V1.2: Added support for Cinema 4D R21
 V1.3: Added support for Cinema 4D R23  
 V1.4: Added support for Cinema 4D R24  
 V1.5: Added support for Cinema 4D R25  
+
+[^1]: [Scene in demo](https://github.com/MichaelBokatius/BlissBox)
