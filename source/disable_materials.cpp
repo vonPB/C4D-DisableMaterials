@@ -5,7 +5,6 @@
 #include "c4d_general.h"
 #include "c4d_basebitmap.h"
 
-
 Bool DisableMaterials::Execute(BaseDocument* doc, GeDialog* parentManager)
 {
 	AutoAlloc<AtomArray> selected_obj;
@@ -64,12 +63,12 @@ void DisableMaterials::disable(BaseTag* tag)
 		return;
 
 	GeData data;
-	tag->GetParameter(TEXTURETAG_RESTRICTION, data, DESCFLAGS_GET::NONE);
+	tag->GetParameter(ConstDescID(DescLevel(TEXTURETAG_RESTRICTION)), data, DESCFLAGS_GET::NONE);
 	if (data.GetString().FindFirst("*disabled*", nullptr))
 		return;
 
 	data.SetString("*disabled*" + data.GetString());
-	tag->SetParameter(TEXTURETAG_RESTRICTION, data, DESCFLAGS_SET::NONE);
+	tag->SetParameter(ConstDescID(DescLevel(TEXTURETAG_RESTRICTION)), data, DESCFLAGS_SET::NONE);
 }
 
 
@@ -131,7 +130,7 @@ void EnableMaterials::enable(BaseTag* tag)
 		return;
 
 	GeData data;
-	tag->GetParameter(TEXTURETAG_RESTRICTION, data, DESCFLAGS_GET::NONE);
+	tag->GetParameter(ConstDescID(DescLevel(TEXTURETAG_RESTRICTION)), data, DESCFLAGS_GET::NONE);
 
 	Int32 pos{};
 	if (!data.GetString().FindFirst("*disabled*", &pos))
@@ -143,5 +142,5 @@ void EnableMaterials::enable(BaseTag* tag)
 	auto str{ data.GetString() };
 	str.Delete(pos, 10);
 	data.SetString(str);
-	tag->SetParameter(TEXTURETAG_RESTRICTION, data, DESCFLAGS_SET::NONE);
+    tag->SetParameter(ConstDescID(DescLevel(TEXTURETAG_RESTRICTION)), data, DESCFLAGS_SET::NONE);
 }

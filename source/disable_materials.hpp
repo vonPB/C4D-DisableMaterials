@@ -4,6 +4,7 @@
 #include "c4d_basetag.h"
 #include "c4d_commanddata.h"
 
+using namespace cinema;
 
 struct DisableMaterials : CommandData
 {

@@ -7,7 +7,7 @@ const char* AUTHOR{ "Philipp Bokatius & Henrik S." };
 const unsigned MAJOR_VER{ 1 };
 const unsigned MINOR_VER{ 5 };
 
-::Bool PluginStart()
+::Bool cinema::PluginStart()
 {
 	if (!DisableMaterials::register_class())
 	{
@@ -27,12 +27,12 @@ const unsigned MINOR_VER{ 5 };
 	return true;
 }
 #include <iostream>
-void PluginEnd()
+void cinema::PluginEnd()
 {
 	// free resources
 }
 
-::Bool PluginMessage(::Int32 id, void* data)
+::Bool cinema::PluginMessage(::Int32 id, void* data)
 {
 	return true;
 }
